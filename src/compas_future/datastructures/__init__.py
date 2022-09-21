@@ -12,3 +12,4 @@ from .assembly import (
     MeshGeometry,
 )
 
+from .mesh import Mesh
