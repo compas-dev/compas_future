@@ -9,9 +9,16 @@ from compas.datastructures import Mesh as _Mesh
 
 
 class Mesh(_Mesh):
+    """
+    Future implementation of the COMPAS mesh data structure.
+    """
+
     def vertex_point(self, vertex):
         x, y, z = self.vertex_attributes(vertex, "xyz")
         return Point(x, y, z)
+
+    def set_vertex_point(self, vertex, point):
+        self.vertex_attributes(vertex, "xyz", point)
 
     def vertex_normal(self, vertex):
         x, y, z = super(Mesh, self).vertex_normal(vertex)
