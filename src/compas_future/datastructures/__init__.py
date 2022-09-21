@@ -1,4 +1,4 @@
-from .assembly import (
+from .assembly import (  # noqa: F401
     Assembly,
     AssemblyError,
     Part,
@@ -12,4 +12,4 @@ from .assembly import (
     MeshGeometry,
 )
 
-from .mesh import Mesh
+from .mesh import Mesh  # noqa: F401
