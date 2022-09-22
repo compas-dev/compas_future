@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Changed `Mesh.edge_direction` to return `Vector`.
 * Changed `Mesh.face_centroid` to return `Point`.
 * Changed `Mesh.face_normal` to return `Vector`.
+* Changed `Mesh.split_edge` to allow for splits at the vertices.
 
 ### Removed
 

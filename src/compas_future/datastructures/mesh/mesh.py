@@ -6,12 +6,15 @@ from compas.geometry import Plane
 from compas.geometry import Frame
 
 from compas.datastructures import Mesh as _Mesh
+from compas_future.datastructures.mesh.operations.split import mesh_split_edge
 
 
 class Mesh(_Mesh):
     """
     Future implementation of the COMPAS mesh data structure.
     """
+
+    split_edge = mesh_split_edge
 
     def vertex_point(self, vertex):
         x, y, z = self.vertex_attributes(vertex, "xyz")
