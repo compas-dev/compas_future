@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `Mesh.halfedge_strip_faces`.
 
 ### Changed
+ 
+* Re-worked `compas.geometry.assembly.part` to include non-destructive `Feature` application.
+* Created an abstraction for `Part` geometry with to support both `Mesh` and `Brep`.
 
 * Changed `Mesh.vertex_normal` to return `Vector`.
 * Changed `Mesh.edge_vector` to return `Vector`.
