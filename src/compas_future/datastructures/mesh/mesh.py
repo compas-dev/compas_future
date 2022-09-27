@@ -20,6 +20,9 @@ class Mesh(_Mesh):
         x, y, z = self.vertex_attributes(vertex, "xyz")
         return Point(x, y, z)
 
+    def vertices_points(self, vertices):
+        return [self.vertex_point(vertex) for vertex in vertices]
+
     def set_vertex_point(self, vertex, point):
         self.vertex_attributes(vertex, "xyz", point)
 
