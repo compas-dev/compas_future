@@ -63,7 +63,7 @@ class GeometryFeature(Feature):
 
         Parameters
         ----------
-        shape : :class:`~compas.geometry._shape.Shape`
+        shape : :class:`compas.geometry._shape.Shape`
                 The shape of this feature
         operation : :callable: e.g. boolean_op_mesh_mesh(A, B)
         """
@@ -93,7 +93,10 @@ class GeometryFeature(Feature):
 
     @property
     def data(self):
-        return {"feature_geometry": self.feature_geometry, "operation": self.get_operation_name_by_value(self.operation)}
+        return {
+            "feature_geometry": self.feature_geometry,
+            "operation": self.get_operation_name_by_value(self.operation),
+        }
 
     @data.setter
     def data(self, value):
@@ -107,7 +110,11 @@ class GeometryFeature(Feature):
     @operation.setter
     def operation(self, value):
         if value not in self.ALLOWED_OPERATIONS:
-            raise ValueError("Operation {} unknown. Expected one of {}".format(value, list(self.ALLOWED_OPERATIONS.keys())))
+            raise ValueError(
+                "Operation {} unknown. Expected one of {}".format(
+                    value, list(self.ALLOWED_OPERATIONS.keys())
+                )
+            )
         self._operation = self.ALLOWED_OPERATIONS[value]
 
     def apply(self):
@@ -161,7 +168,11 @@ class GeometryFeature(Feature):
         try:
             return {v: k for k, v in cls.ALLOWED_OPERATIONS.items()}[value]
         except KeyError:
-            raise ValueError("Expected one of the following operations {} got instead {}".format([v.__name__ for _, v in cls.ALLOWED_OPERATIONS.items()], value))
+            raise ValueError(
+                "Expected one of the following operations {} got instead {}".format(
+                    [v.__name__ for _, v in cls.ALLOWED_OPERATIONS.items()], value
+                )
+            )
 
 
 class MeshFeature(GeometryFeature):
@@ -169,7 +180,11 @@ class MeshFeature(GeometryFeature):
     Represents a Mesh/Shape feature of a Part. Can be applied to Part whose geometry is described by a MeshGeometry.
     """
 
-    ALLOWED_OPERATIONS = {"union": boolean_union_mesh_mesh, "difference": boolean_difference_mesh_mesh, "intersection": boolean_intersection_mesh_mesh}
+    ALLOWED_OPERATIONS = {
+        "union": boolean_union_mesh_mesh,
+        "difference": boolean_difference_mesh_mesh,
+        "intersection": boolean_intersection_mesh_mesh,
+    }
 
     def __init__(self, part=None, geometry=None, operation=None):
         super(MeshFeature, self).__init__(part, geometry, operation)
@@ -195,7 +210,9 @@ class BrepFeature(GeometryFeature):
         cutting_plane = feature_geometry
         brep.trim(cutting_plane, tolerance)
 
-    ALLOWED_OPERATIONS = {"trim": _trim_brep_with_plane.__func__}  # cannot reference static method before it's declared
+    ALLOWED_OPERATIONS = {
+        "trim": _trim_brep_with_plane.__func__
+    }  # cannot reference static method before it's declared
 
     def __init__(self, part=None, geometry=None, operation=None):
         super(BrepFeature, self).__init__(part, geometry, operation)
@@ -204,7 +221,9 @@ class BrepFeature(GeometryFeature):
         part_geometry = self.part.geometry
         self.operation(self.feature_geometry, part_geometry, self.TOLERANCE)
         new_part_geometry = BrepGeometry(part_geometry)
-        self.part._part_geometry = new_part_geometry.transformed(Transformation.from_frame_to_frame(self.part.frame, Frame.worldXY()))
+        self.part._part_geometry = new_part_geometry.transformed(
+            Transformation.from_frame_to_frame(self.part.frame, Frame.worldXY())
+        )
 
 
 class PartGeometry(Geometry):
@@ -223,7 +242,7 @@ class PartGeometry(Geometry):
 
         Returns
         -------
-        Type[:class:`~compas.datastructures.assembly.part.Feature`]
+        Type[:class:`compas.datastructures.assembly.part.Feature`]
         """
         raise NotImplementedError
 
@@ -233,7 +252,7 @@ class PartGeometry(Geometry):
 
         Returns
         -------
-        :class:`~compas.data.Data`
+        :class:`compas.data.Data`
         An instance of an object which represents this geometry and can be drawn by one of the currently supported Artists.
         """
         return self.geometry
@@ -285,11 +304,11 @@ class Part(Datastructure):
     name : str, optional
         The name of the part.
         The name will be stored in :attr:`Part.attributes`.
-    frame : :class:`~compas.geometry.Frame`, optional
+    frame : :class:`compas.geometry.Frame`, optional
         The local coordinate system of the part.
-    shape : :class:`~compas.geometry.Shape`, optional
+    shape : :class:`compas.geometry.Shape`, optional
         The base shape of the part geometry.
-    features : sequence[tuple[:class:`~compas.geometry.Shape`, str]], optional
+    features : sequence[tuple[:class:`compas.geometry.Shape`, str]], optional
         The features to be added to the base shape of the part geometry.
 
     Attributes
@@ -298,17 +317,17 @@ class Part(Datastructure):
         General data structure attributes that will be included in the data dict and serialization.
     key : int or str
         The identifier of the part in the connectivity graph of the parent assembly.
-    frame : :class:`~compas.geometry.Frame`
+    frame : :class:`compas.geometry.Frame`
         The local coordinate system of the part.
-    shape : :class:`~compas.geometry.Shape`
+    shape : :class:`compas.geometry.Shape`
         The base shape of the part geometry.
-    features : list[tuple[:class:`~compas.geometry.Shape`, str]]
+    features : list[tuple[:class:`compas.geometry.Shape`, str]]
         The features added to the base shape of the part geometry.
-    transformations : Deque[:class:`~compas.geometry.Transformation`]
+    transformations : Deque[:class:`compas.geometry.Transformation`]
         The stack of transformations applied to the part geometry.
         The most recent transformation is on the left of the stack.
         All transformations are with respect to the local coordinate system.
-    geometry : :class:`~compas.geometry.Polyhedron`, read-only
+    geometry : :class:`compas.geometry.Polyhedron`, read-only
         A copy of the part's geometry, including applied features, transformed to part.frame.
 
     Class Attributes
@@ -325,7 +344,9 @@ class Part(Datastructure):
         self.key = None
         self.frame = frame or Frame.worldXY()
         self.features = features or []
-        self.transformations = deque()  # TODO: why is it necessary to queue all transformations?
+        self.transformations = (
+            deque()
+        )  # TODO: why is it necessary to queue all transformations?
 
         self.geometry = geometry or MeshGeometry(geometry=Polyhedron([], []))
 
@@ -370,7 +391,9 @@ class Part(Datastructure):
         self.features = data["features"]
         for f in self.features:
             f.part = self
-        self.transformations = deque([Transformation.from_data(T) for T in data["transformations"]])
+        self.transformations = deque(
+            [Transformation.from_data(T) for T in data["transformations"]]
+        )
 
     @property
     def name(self):
@@ -394,7 +417,9 @@ class Part(Datastructure):
         -------
 
         """
-        transformed_geometry = self._part_geometry.transformed(Transformation.from_frame_to_frame(Frame.worldXY(), self.frame))
+        transformed_geometry = self._part_geometry.transformed(
+            Transformation.from_frame_to_frame(Frame.worldXY(), self.frame)
+        )
         return transformed_geometry.get_underlying_geometry()
 
     @geometry.setter
@@ -412,7 +437,7 @@ class Part(Datastructure):
 
         Parameters
         ----------
-        T : :class:`~compas.geometry.Transformation`
+        T : :class:`compas.geometry.Transformation`
 
         Returns
         -------
@@ -429,7 +454,9 @@ class Part(Datastructure):
             self._restore_original_geometry()
             self.features = []
         else:
-            earliest_feature_index = self._restore_earliest_feature_in_list(features_to_clear)
+            earliest_feature_index = self._restore_earliest_feature_in_list(
+                features_to_clear
+            )
             self.features = [f for f in self.features if f not in features_to_clear]
             self._replay_features(from_index=earliest_feature_index)
 
@@ -446,7 +473,7 @@ class Part(Datastructure):
 
         Parameters
         ----------
-        shape : :class:`~compas.assembly.PartGeometry`
+        shape : :class:`compas.assembly.PartGeometry`
             The geometry of the feature.
         operation : Literal['union', 'difference', 'intersection']
             The boolean operation through which the feature should be integrated in the base shape.
@@ -461,10 +488,16 @@ class Part(Datastructure):
         # TODO: this is a bit hacky, maybe better solution is due
         # TODO: A Mesh part geometry calls for features that also consist of a mesh geometry
         # TODO: A Brep part, however, allows other feature geometries e.g. a Plane
-        class_ = geometry.FEATURE_CLASS if isinstance(geometry, PartGeometry) else BrepFeature
+        class_ = (
+            geometry.FEATURE_CLASS
+            if isinstance(geometry, PartGeometry)
+            else BrepFeature
+        )
         # unload_modules can make it difficult comparying types by identity
         if class_.__name__ != self._part_geometry.FEATURE_CLASS.__name__:
-            raise TypeError("Cannot mix Brep geometry with mesh operations or vice versa.")
+            raise TypeError(
+                "Cannot mix Brep geometry with mesh operations or vice versa."
+            )
 
         feature = class_(self, geometry, operation)
         self.add_feature(feature)
@@ -475,7 +508,7 @@ class Part(Datastructure):
 
         Parameters
         ----------
-        feature : :class:`~compas.assembly.Feature`
+        feature : :class:`compas.assembly.Feature`
             The feature to add
         apply : :bool:
             If True, feature is also applied
@@ -513,12 +546,12 @@ class Part(Datastructure):
 
         Parameters
         ----------
-        cls : :class:`~compas.datastructures.Mesh`, optional
+        cls : :class:`compas.datastructures.Mesh`, optional
             The type of mesh to be used for the conversion.
 
         Returns
         -------
-        :class:`~compas.datastructures.Mesh`
+        :class:`compas.datastructures.Mesh`
             The resulting mesh.
 
         """

@@ -8,7 +8,7 @@ def mesh_split_edge(mesh, u, v, t=0.5, allow_boundary=False):
 
     Parameters
     ----------
-    mesh : :class:`~compas.datastructures.Mesh`
+    mesh : :class:`compas.datastructures.Mesh`
         Instance of a mesh.
     u : int
         The key of the first vertex of the edge.
