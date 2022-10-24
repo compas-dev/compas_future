@@ -195,6 +195,14 @@ class Ellipse(Conic):
         self._minor = float(minor)
 
     @property
+    def a(self):
+        return self.major
+
+    @property
+    def b(self):
+        return self.minor
+
+    @property
     def center(self):
         return self.frame.point
 
@@ -216,11 +224,11 @@ class Ellipse(Conic):
 
     @property
     def focus1(self):
-        self.point + self.xaxis * self.semifocal
+        return self.point + self.xaxis * self.semifocal
 
     @property
     def focus2(self):
-        self.point + self.xaxis * -self.semifocal
+        return self.point + self.xaxis * -self.semifocal
 
     @property
     def directix1(self):
@@ -288,6 +296,96 @@ class Ellipse(Conic):
     # ==========================================================================
     # transformations
     # ==========================================================================
+
+    def point_at(self, t, normalized=False):
+        """
+        Point at the parameter.
+
+        Parameters
+        ----------
+        t : float
+
+        Returns
+        -------
+        :class:`compas_future.geometry.Point`
+
+        """
+        if normalized:
+            t = t * 2 * pi
+        x = self.a * cos(t)
+        y = self.b * sin(t)
+        z = 0
+        point = Point(x, y, z)
+        point.transform(self._transformation)
+        return point
+
+    def tangent_at(self, t, normalized=False):
+        """
+        Tangent vector at the parameter.
+
+        Parameters
+        ----------
+        t : float
+            The line parameter.
+
+        Returns
+        -------
+        :class:`compas_future.geometry.Vector`
+
+        """
+        if normalized:
+            t = t * 2 * pi
+        a = self.a
+        b = self.b
+        x = -a * sin(t)
+        y = +b * cos(t)
+        z = 0
+        tangent = Vector(x, y, z)
+        tangent.unitize()
+        tangent.transform(self._transformation)
+        return tangent
+
+    def normal_at(self, t, normalized=False):
+        """
+        Normal at a specific normalized parameter.
+
+        Parameters
+        ----------
+        t : float
+            The line parameter.
+
+        Returns
+        -------
+        :class:`compas_future.geometry.Vector`
+
+        """
+        if normalized:
+            t = t * 2 * pi
+        xaxis = self.tangent_at(t, normalized=False)
+        yaxis = self.frame.zaxis.cross(xaxis)
+        yaxis.unitize()
+        return yaxis
+
+    def frame_at(self, t, normalized=False):
+        """
+        Frame at the parameter.
+
+        Parameters
+        ----------
+        t : float
+            The line parameter.
+
+        Returns
+        -------
+        :class:`compas_future.geometry.Frame`
+
+        """
+        if normalized:
+            t = t * 2 * pi
+        point = self.point_at(t, normalized=False)
+        xaxis = self.tangent_at(t, normalized=False)
+        yaxis = self.frame.zaxis.cross(xaxis)
+        return Frame(point, xaxis, yaxis)
 
     def transform(self, T):
         """Transform the ellipse.

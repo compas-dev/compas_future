@@ -241,7 +241,7 @@ class Circle(Conic):
     # methods
     # ==========================================================================
 
-    def point_at(self, t):
+    def point_at(self, t, normalized=False):
         """
         Point at the parameter.
 
@@ -254,6 +254,8 @@ class Circle(Conic):
         :class:`compas_future.geometry.Point`
 
         """
+        if normalized:
+            t = t * 2 * pi
         x = self.radius * cos(t)
         y = self.radius * sin(t)
         z = 0
@@ -261,7 +263,7 @@ class Circle(Conic):
         point.transform(self._transformation)
         return point
 
-    def tangent_at(self, t):
+    def tangent_at(self, t, normalized=False):
         """
         Tangent vector at the parameter.
 
@@ -275,13 +277,14 @@ class Circle(Conic):
         :class:`compas_future.geometry.Vector`
 
         """
-        axis = self.frame.zaxis
-        normal = self.normal_at(t)
-        tangent = axis.cross(normal)
+        if normalized:
+            t = t * 2 * pi
+        normal = self.normal_at(t, normalized=False)
+        tangent = normal.cross(self.frame.zaxis)
         tangent.unitize()
         return tangent
 
-    def normal_at(self, t):
+    def normal_at(self, t, normalized=False):
         """
         Normal at a specific normalized parameter.
 
@@ -295,13 +298,15 @@ class Circle(Conic):
         :class:`compas_future.geometry.Vector`
 
         """
-        a = self.point_at(t)
+        if normalized:
+            t = t * 2 * pi
+        a = self.point_at(t, normalized=False)
         b = self.point
         normal = b - a
         normal.unitize()
         return normal
 
-    def frame_at(self, t):
+    def frame_at(self, t, normalized=False):
         """
         Frame at the parameter.
 
@@ -315,10 +320,11 @@ class Circle(Conic):
         :class:`compas_future.geometry.Frame`
 
         """
-        point = self.point_at(t)
-        xaxis = self.vector
-        zaxis = Vector.Zaxis()
-        yaxis = zaxis.cross(xaxis)
+        if normalized:
+            t = t * 2 * pi
+        point = self.point_at(t, normalized=False)
+        yaxis = self.normal_at(t, normalized=False)
+        xaxis = yaxis.cross(self.frame.zaxis)
         return Frame(point, xaxis, yaxis)
 
     def transform(self, T):
