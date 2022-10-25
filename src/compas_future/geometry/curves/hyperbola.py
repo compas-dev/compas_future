@@ -15,9 +15,26 @@ from compas_future.geometry.curves.conic import Conic
 
 
 class Hyperbola(Conic):
-    """
-    A hyperbola is defined by a plane and a major and minor axis.
-    The origin of the coordinate frame is the center of the hyperbola.
+    r"""
+    A hyperbola is defined by a coordinate frame and a major and minor axis.
+
+    It is implemented using the equation
+
+    .. math::
+
+        \frac{x^2}{a^2} - \frac{y^2}{b^2} = 1
+
+    and with parametric form
+
+    .. math::
+
+        x(t) &= a \times \sec(t) \\
+        y(t) &= b \times \tan(t)
+
+    This means that the center of the hyperbola is at the center of the coordinate frame,
+    the vertices of the left and right branches are at (0, -a) and (0, +a) respectively,
+    the linear eccentricity is math::`\sqrt{a^2 + b^2}`,
+    and the eccentricity math::`\fraq{\sqrt{a^2 + b^2}}{a}`.
 
     Parameters
     ----------
@@ -31,9 +48,9 @@ class Hyperbola(Conic):
     Attributes
     ----------
     is_periodic : bool, read-only
-        An hyperbola is periodic (True).
+        A hyperbola is not periodic (False).
     is_closed : bool, read-only
-        An hyperbola is closed (True).
+        A hyperbola is not closed (False).
     domain : tuple[float, float], read-only
         The parameter domain: 0, 2pi
     eccentricity : float, read-only
@@ -227,6 +244,14 @@ class Hyperbola(Conic):
         return self.point + self.xaxis * -self.semifocal
 
     @property
+    def vertex1(self):
+        return self.point + self.xaxis * self.a
+
+    @property
+    def vertex2(self):
+        return self.point + self.xaxis * -self.a
+
+    @property
     def asymptote1(self):
         pass
 
@@ -282,7 +307,7 @@ class Hyperbola(Conic):
     # ==========================================================================
 
     # ==========================================================================
-    # transformations
+    # methods
     # ==========================================================================
 
     def point_at(self, t, normalized=False):
@@ -300,9 +325,9 @@ class Hyperbola(Conic):
         """
         if normalized:
             t = t * 2 * pi
-        secant = 1 / cos(t)
-        x = self.a * secant
-        y = self.b * sin(t) * secant
+        sec_t = 1 / cos(t)
+        x = self.a * sec_t
+        y = self.b * sin(t) * sec_t
         point = Point(x, y, 0)
         point.transform(self._transformation)
         return point
@@ -363,29 +388,3 @@ class Hyperbola(Conic):
         xaxis = self.tangent_at(t, normalized=False)
         yaxis = self.frame.zaxis.cross(xaxis)
         return Frame(point, xaxis, yaxis)
-
-    def transform(self, T):
-        """Transform the hyperbola.
-
-        Parameters
-        ----------
-        T : :class:`compas.geometry.Transformation` | list[list[float]]
-            The transformation.
-
-        Returns
-        -------
-        None
-
-        Examples
-        --------
-        >>> from compas.geometry import Frame
-        >>> from compas.geometry import Transformation
-        >>> from compas.geometry import Plane
-        >>> from compas.geometry import Hyperbola
-        >>> hyperbola = Hyperbola(Plane.worldXY(), 8, 5)
-        >>> frame = Frame([1, 1, 1], [0.68, 0.68, 0.27], [-0.67, 0.73, -0.15])
-        >>> T = Transformation.from_frame(frame)
-        >>> hyperbola.transform(T)
-
-        """
-        self.plane.transform(T)

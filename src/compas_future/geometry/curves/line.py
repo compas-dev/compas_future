@@ -284,7 +284,8 @@ class Line(Curve):
         return yaxis
 
     def transform(self, T):
-        """Transform this line.
+        """
+        Transform this line.
 
         Parameters
         ----------
@@ -294,16 +295,6 @@ class Line(Curve):
         Returns
         -------
         None
-
-        Examples
-        --------
-        >>> from math import radians
-        >>> from compas.geometry import Rotation
-        >>> line = Line([0.0, 0.0, 0.0], [1.0, 0.0, 0.0])
-        >>> R = Rotation.from_axis_and_angle([0.0, 0.0, 1.0], radians(90))
-        >>> line.transform(R)
-        >>> line.end
-        Point(0.000, 1.000, 0.000)
 
         """
         self.start.transform(T)

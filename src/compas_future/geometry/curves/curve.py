@@ -32,11 +32,14 @@ class Curve(Geometry):
     def point_at(self, t):
         raise NotImplementedError
 
-    def frame_at(self, t):
-        raise NotImplementedError
-
     def tangent_at(self, t):
         raise NotImplementedError
 
     def normal_at(self, t):
+        raise NotImplementedError
+
+    def frame_at(self, t):
+        raise NotImplementedError
+
+    def to_polyline(self, resolution=100):
         raise NotImplementedError

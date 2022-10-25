@@ -294,7 +294,7 @@ class Ellipse(Conic):
     # ==========================================================================
 
     # ==========================================================================
-    # transformations
+    # methods
     # ==========================================================================
 
     def point_at(self, t, normalized=False):
@@ -386,29 +386,3 @@ class Ellipse(Conic):
         xaxis = self.tangent_at(t, normalized=False)
         yaxis = self.frame.zaxis.cross(xaxis)
         return Frame(point, xaxis, yaxis)
-
-    def transform(self, T):
-        """Transform the ellipse.
-
-        Parameters
-        ----------
-        T : :class:`compas.geometry.Transformation` | list[list[float]]
-            The transformation.
-
-        Returns
-        -------
-        None
-
-        Examples
-        --------
-        >>> from compas.geometry import Frame
-        >>> from compas.geometry import Transformation
-        >>> from compas.geometry import Plane
-        >>> from compas.geometry import Ellipse
-        >>> ellipse = Ellipse(Plane.worldXY(), 8, 5)
-        >>> frame = Frame([1, 1, 1], [0.68, 0.68, 0.27], [-0.67, 0.73, -0.15])
-        >>> T = Transformation.from_frame(frame)
-        >>> ellipse.transform(T)
-
-        """
-        self.plane.transform(T)

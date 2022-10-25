@@ -242,7 +242,7 @@ class Parabola(Conic):
     # ==========================================================================
 
     # ==========================================================================
-    # transformations
+    # methods
     # ==========================================================================
 
     def point_at(self, t):
@@ -329,18 +329,3 @@ class Parabola(Conic):
         xaxis = self.tangent_at(t, normalized=False)
         yaxis = self.frame.zaxis.cross(xaxis)
         return Frame(point, xaxis, yaxis)
-
-    def transform(self, T):
-        """Transform the parabola.
-
-        Parameters
-        ----------
-        T : :class:`compas.geometry.Transformation`
-            The transformation.
-
-        Returns
-        -------
-        None
-
-        """
-        raise NotImplementedError

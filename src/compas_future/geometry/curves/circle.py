@@ -326,29 +326,3 @@ class Circle(Conic):
         yaxis = self.normal_at(t, normalized=False)
         xaxis = yaxis.cross(self.frame.zaxis)
         return Frame(point, xaxis, yaxis)
-
-    def transform(self, T):
-        """Transform the circle.
-
-        Parameters
-        ----------
-        T : :class:`compas.geometry.Transformation` | list[list[float]]
-            The transformation.
-
-        Returns
-        -------
-        None
-
-        Examples
-        --------
-        >>> from compas.geometry import Frame
-        >>> from compas.geometry import Transformation
-        >>> from compas.geometry import Plane
-        >>> from compas.geometry import Circle
-        >>> circle = Circle(Plane.worldXY(), 5)
-        >>> frame = Frame([1, 1, 1], [0.68, 0.68, 0.27], [-0.67, 0.73, -0.15])
-        >>> T = Transformation.from_frame(frame)
-        >>> circle.transform(T)
-
-        """
-        self.plane.transform(T)
