@@ -11,9 +11,9 @@ frame = Frame([0, 0, 0], [1, 0, 0], [0, 1, 0])
 ellipse = Ellipse(frame, 3.0, 2.0)
 
 center = ellipse.point
-point = ellipse.point_at(0.2)
-normal = ellipse.normal_at(0.2)
-tangent = ellipse.tangent_at(0.2)
+point = ellipse.point_at(0.2, normalized=True)
+normal = ellipse.normal_at(0.2, normalized=True)
+tangent = ellipse.tangent_at(0.2, normalized=True)
 
 viewer = Viewer()
 

@@ -26,12 +26,4 @@ viewer.add(
     Polyline([hyperbola.point_at(t) for t in linspace(1.50001 * pi, 2.0 * pi, 1000)])
 )
 
-viewer.add(hyperbola.center)
-
-viewer.add(hyperbola.focus1)
-viewer.add(hyperbola.focus2)
-
-viewer.add(hyperbola.vertex1)
-viewer.add(hyperbola.vertex2)
-
 viewer.run()

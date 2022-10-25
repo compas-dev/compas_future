@@ -12,9 +12,9 @@ frame = Frame.worldXY()
 circle = Circle(frame, 3.0)
 
 center = circle.point
-point = circle.point_at(0.25)
-normal = circle.normal_at(0.25)
-tangent = circle.tangent_at(0.25)
+point = circle.point_at(0.25, normalized=True)
+normal = circle.normal_at(0.25, normalized=True)
+tangent = circle.tangent_at(0.25, normalized=True)
 
 viewer = Viewer()
 
