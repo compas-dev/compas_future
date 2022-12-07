@@ -12,4 +12,19 @@ from .assembly import (  # noqa: F401
     MeshGeometry,
 )
 
-from .mesh import Mesh  # noqa: F401
+from .mesh import Mesh
+
+__all__ = [
+    "Assembly",
+    "AssemblyError",
+    "Part",
+    "Feature",
+    "FeatureError",
+    "GeometryFeature",
+    "BrepFeature",
+    "MeshFeature",
+    "PartGeometry",
+    "BrepGeometry",
+    "MeshGeometry",
+    "Mesh",
+]
