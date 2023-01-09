@@ -6,24 +6,16 @@ from .exceptions import AssemblyError
 from .exceptions import FeatureError 
 from .assembly import Assembly
 from .part import Part  
-from .part import PartGeometry  
-from .part import MeshGeometry  
-from .part import BrepGeometry  
 from .part import Feature  
-from .part import GeometryFeature  
-from .part import MeshFeature  
-from .part import BrepFeature  
+from .part import GeometricFeature
+from .part import ParametricFeature
 
 __all__ = [
     "AssemblyError",
     "FeatureError",
     "Assembly",
     "Part",
-    "PartGeometry",
-    "MeshGeometry",
-    "BrepGeometry",
     "Feature",
-    "GeometryFeature",
-    "MeshFeature",
-    "BrepFeature",
+    "GeometricFeature",
+    "ParametricFeature",
 ]

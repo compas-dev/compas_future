@@ -4,12 +4,8 @@ from .assembly import (  # noqa: F401
     Part,
     Feature,
     FeatureError,
-    GeometryFeature,
-    BrepFeature,
-    MeshFeature,
-    PartGeometry,
-    BrepGeometry,
-    MeshGeometry,
+    GeometricFeature,
+    ParametricFeature,
 )
 
 from .mesh import Mesh
@@ -20,11 +16,9 @@ __all__ = [
     "Part",
     "Feature",
     "FeatureError",
-    "GeometryFeature",
+    "GeometricFeature",
+    "ParametricFeature",
     "BrepFeature",
     "MeshFeature",
-    "PartGeometry",
-    "BrepGeometry",
-    "MeshGeometry",
     "Mesh",
 ]
