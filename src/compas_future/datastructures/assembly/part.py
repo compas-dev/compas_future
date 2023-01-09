@@ -18,8 +18,8 @@ class Feature(Data):
         raise NotImplementedError
 
     def accumulate(self, feature):
-        """The effect of the given feature shall accumulate with the effect of this one. True is returned if 
-        the given feature has been consumed by this one. 
+        """The effect of the given feature shall accumulate with the effect of this one. True is returned if
+        the given feature has been consumed by this one.
 
         False is returned if the feature is not compatible and should be applied independently.
 
@@ -142,13 +142,13 @@ class Part(Datastructure):
         ----------
         with_features : bool
             True if geometry should include all the available features.
-        
+
         Returns
         -------
         :class:`~compas.geometry.Geometry`
 
         """
-        raise NotImplemented
+        raise NotImplementedError
 
     def clear_features(self, features_to_clear=None):
         pass
